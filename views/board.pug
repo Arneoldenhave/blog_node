@@ -1,0 +1,21 @@
+html
+	head
+	body
+		form(action="/message" method="post")
+			input(name='topic' type='text' placeholder='Topic' 
+			id='topic')
+			br
+			input(name='message' type='text' placeholder='Message' id='message')
+			br
+			button(type='submit' formmethod='post') Post
+
+
+		h1 Recent posts
+		each message in Messages
+			p Topic: #{message.title}
+			p Message: #{message.message}
+			P Comment: 
+				form(action="/comment" method="post")
+					input(name='comment' type='text' placeholder='Comment' id='comment') 
+					button(type='submit' formmethod='post') Comment
+
