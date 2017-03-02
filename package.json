@@ -11,8 +11,10 @@
   "dependencies": {
     "body-parser": "^1.16.1",
     "express": "^4.14.1",
+    "express-session": "^1.15.1",
     "pg": "^6.1.2",
     "pug": "^2.0.0-beta11",
-    "sequelize": "^3.30.2"
+    "sequelize": "^3.30.2",
+    "sessions": "0.0.2-7"
   }
 }

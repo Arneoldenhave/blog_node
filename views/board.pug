@@ -12,10 +12,5 @@ html
 
 		h1 Recent posts
 		each message in Messages
-			p Topic: #{message.title}
-			p Message: #{message.message}
-			P Comment: 
-				form(action="/comment" method="post")
-					input(name='comment' type='text' placeholder='Comment' id='comment') 
-					button(type='submit' formmethod='post') Comment
-
+			p Topic: 
+				a(href="localhost:3000/posts/"+ message.id) #{message.title}

@@ -11,13 +11,14 @@ dataBase.connect = new Sequelize(connectString);
 dataBase.Users = dataBase.connect.define('user', {
 	name: Sequelize.STRING,
 	password: Sequelize.STRING,
-	email: Sequelize.STRING
+	email: Sequelize.STRING,
+
 
 });
 
 dataBase.Messages = dataBase.connect.define('message', {
 	title: Sequelize.STRING,
-	message: Sequelize.STRING
+	message: Sequelize.STRING,
 });
 
 dataBase.Comments = dataBase.connect.define('comment', {
