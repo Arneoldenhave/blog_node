@@ -22,7 +22,8 @@ dataBase.Messages = dataBase.connect.define('message', {
 });
 
 dataBase.Comments = dataBase.connect.define('comment', {
-	comment: Sequelize.STRING
+	comment: Sequelize.STRING,
+
 });
 
 //RELATIONS

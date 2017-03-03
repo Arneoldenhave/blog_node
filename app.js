@@ -56,36 +56,22 @@ app.get('/profile', (req, res)=>{
   }
 });
 
-//One specific post
-//example routes that can hit this page
-// localhost:3000/posts/1
-// localhost:3000/posts/10
-// localhost:3000/posts/963
-
-//example routes that can hit this page (but will fuck up your route so don't do it)
-// localhost:3000/posts/lol
-// localhost:3000/posts/lolcat....yolo
-// localhost:3000/posts/lol.jpg
-// localhost:3000/posts/mypicture.mp3.zip.tar.png
 
 //SINGLE POST
-app.get('/posts/:postId', (req, res) => {
-  
-  const postId = req.params.postId
+app.get('/posts', (req, res) => {
+  console.log(req.query.id)
+  var postId= req.query.id
   console.log(postId)
 
-  const postWriter = dataBase.findOne()
-  // dataBase.Messages.findOne({
-  //   where: {
-  //     id: postId,
-  //   }
-  // })
-  //make a database query with the post id
-  //do the database query here
-  dataBase.Messages.findById(postId)
+  dataBase.Messages.findOne({where: {id:postId},
+  include: [
+     { model: dataBase.Users},
+     { model: dataBase.Comments}
+  ]
+})
   .then((message)=> {
-     //now you have a post, but for now I'm going to mock the post
-    res.render('single_post', message)
+    console.log(message)
+    res.render('single_post', {message:message})
   })
 });
 
@@ -139,7 +125,7 @@ app.post('/message', (req,res)=> {
     userId: req.session.user.id
 
     }).then((message)=> {
-      res.redirect('board')
+      res.redirect('/board')
     })  
   }
   else {
@@ -149,16 +135,16 @@ app.post('/message', (req,res)=> {
 });
 
 app.post('/comment', (req, res) => {
-  console.log('logging req.body')
-  console.log(req.body)
+ //  console.log('///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////')
   dataBase.Comments.create ({
-    comment: req.body.comment
-  }).then((comment)=> {
-    console.log('logging comments @ /comment')
-    console.log(dataBase.Comments)
+    comment: req.body.comment_body,
+    userId: req.session.user.id,
+    messageId : req.body.message_id
   })
   .then((comment)=> {
-    res.redirect('board')
+    console.log('logging comment')
+    console.log(comment)
+    res.redirect('/posts?id=' + encodeURIComponent(comment.messageId))
   })
 });
 
@@ -174,17 +160,6 @@ dataBase.connect.sync({force:true}).then((db)=> {
           email: "DEAFAULT_EMAIL"
         })
       })
-      .then((DEFAULT_MESSAGE) => {
-        dataBase.Messages.create({
-          title: "DEFAULT_TITLE",
-          message: "DEFAULT_MESSAGE"
-        })
-      })
-      .then((DEFAULT_COMMENT)=> {
-        dataBase.Comments.create({
-          comment: "DEFAULT_COMMENT"
-        })
-      })
   		.catch(function (err) {
     		console.log('Unable to connect to the database:', err);
   		})
@@ -195,3 +170,11 @@ dataBase.connect.sync({force:true}).then((db)=> {
   })
 });
 
+
+//Find one, Post.findOne{
+//   where messageid === usersid.
+//   include module comment.(pakt autmatisch alle comments die hetzelfde message id hebben
+//     )
+//   wanneer je dit doet met een prmies krijg jee groot object waarin de post staat en oo de comments als values van keys.
+
+// }

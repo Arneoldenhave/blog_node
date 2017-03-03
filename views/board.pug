@@ -13,4 +13,12 @@ html
 		h1 Recent posts
 		each message in Messages
 			p Topic: 
-				a(href="localhost:3000/posts/"+ message.id) #{message.title}
+				a(href="/posts/?id="+ message.id) #{message.title}
+
+	script.
+		document.getElementById('topic').value='DEFAULT_TOPIC';
+
+
+		document.getElementById('message').value='DEFAULT_MESSAGE';
+	
+	
